@@ -70,7 +70,7 @@ and you Public subnet the tag:
 
 Please see [subnet requirements and considerations](https://docs.aws.amazon.com/eks/latest/userguide/network_reqs.html)
 
-go to directory [VPC](https://github.com/SonarSource-Demos/aws-workshop/tree/sonar-browsable-markdown/static/assets/CDK/VPC3) (please read the README.md)
+go to directory [VPC](vpc) (please read the README.md)
 
 ### ✅ Creating a EKS Cluster
 go to directory [EKS](https://github.com/SonarSource-Demos/aws-workshop/tree/sonar-browsable-markdown/static/assets/CDK/EKS) (please read the README.md)
