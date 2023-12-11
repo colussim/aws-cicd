@@ -52,7 +52,8 @@ config_crd.json :
 Region:  Deployment region	        
 Account: AWS account number
 SSOProfile: AWS SSO Profile using
-Index: Number to generate a name for the VPC, EKS Cluster,AWS Secret, Stacks .... : <NAME+INDEX>
+Index: Number to generate a name for the VPC, EKS Cluster,AWS Secret, Stacks .... :
+      <NAME+INDEX>
 AWSsecret: AWS Secret name for sonarqube 
 ```    
 ❗️ You must initialize these variables with your informations.
