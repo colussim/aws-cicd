@@ -35,6 +35,7 @@ server.
 * A Git Client
 * [AWS git-remote-codecommit](https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-git-remote-codecommit.html) Git extension. This will be used to authenticate requests to the repo
 * [eksctl installed](https://eksctl.io/installation/) 
+* bash version 4+
 
 When setting up a new AWS environment for our project, one of the first things you'll need to do is create a VPC.
 When setting up the VPC, it is essential to configure security groups to control inbound and outbound traffic to and from the VPC. Security groups act as virtual firewalls, allowing only authorized traffic to pass through.
