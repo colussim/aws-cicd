@@ -4,7 +4,7 @@
 
 In a fast-moving software development process, we want to get feedback on code quality as early as possible. Traditionally this would require pushing code into a CI/CD pipeline and waiting for various analysis and test stages to complete. By using Sonar's Pull Request (PR) analysis feature we can shorten the feedback-cycle for developers. Everytime a developer commits code in a PR, we want Sonar scanning to be triggered.
 
-![Flow EventBridge](images/archiflow2.png)
+![Flow EventBridge](../images1/archiflow2.png)
 
 The purpose of this deployment is to configure an Amazon EventBridge rule to enable the previously described workflow.
 - Creating a EventBridge Role

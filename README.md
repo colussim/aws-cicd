@@ -115,6 +115,8 @@ aws-cicd:/vpc> cdk destroy --force
 
 ```
 
+If you want to uninstall one particular component, you have in each step the instruction .
+
 ---
 
 ## ✅ Next step
