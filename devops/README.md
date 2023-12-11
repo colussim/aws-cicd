@@ -12,7 +12,7 @@ The purpose of this deployment is to configure a AWS DevOps environment:
 - Allow CodeBuild to deploy to the EKS cluster
 - Setup CodePipeline
 
-![Flow EventBridge](images/archiflow2.png)
+![Flow EventBridge](../images1/archiflow2.png)
 
 * The `cdk.json` file tells the CDK toolkit how to execute your app.
 * The `config.json` Contains the parameters to be initialized to deploy the task :
