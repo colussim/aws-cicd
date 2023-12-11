@@ -1,4 +1,4 @@
-![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white)![Amazon EKS](https://img.shields.io/static/v1?style=for-the-badge&message=Amazon+EKS&color=222222&logo=Amazon+ECS&logoColor=FF9900&label=)![Static Badge](https://img.shields.io/badge/Go-v1.21-blue:) ![Static Badge](https://img.shields.io/badge/AWS_CDK-v2.96.2-blue:)
+![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white)![Amazon EKS](https://img.shields.io/static/v1?style=for-the-badge&message=Amazon+EKS&color=222222&logo=Amazon+ECS&logoColor=FF9900&label=)![Static Badge](https://img.shields.io/badge/Go-v1.21-blue:) ![Static Badge](https://img.shields.io/badge/AWS_CDK-v2.114.1-blue:)
 
 
 # Welcome to your CDK Deployment with Go.
@@ -57,7 +57,7 @@ aws-cicd:/eks/> cdk deploy
 
 ``` 
 
-❗️ When you run the deployment command, you're likely to get an warning like this: 
+❗️ When you run the deployment command, you're likely to get an warning like this (if you're using a CDK version lower than 2.114.2): 
 
 ``` 
 Warning at /EksStack03/ClustWorkshop03] Could not auto-tag private subnet subnet-0359e8e6d390220ed with "kubernetes.io/role/internal-elb=1", please remember to do this manually [ack: @aws-cdk/aws-eks:clusterMustManuallyTagSubnet]
