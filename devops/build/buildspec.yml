@@ -1,0 +1,114 @@
+version: 0.2
+env:
+  secrets-manager:
+    SONAR_TOKEN: prod/sonar:SONAR_TOKEN
+    SONAR_HOST_URL: prod/sonar:SONAR_HOST_URL
+  variables:
+    SourceBranch: ""
+    DestinationBranch: ""
+    IMAGE_REPO_NAME: "app-container-repo"
+    IMAGE_TAG: "Latest"
+    EKS_CLUSTER_NAME: "sonar-cluster"
+    EKS_NS_APP: "sonar-aws-javaapp-ns"
+    EKS_CODEBUILD_APP_SVC: "sonar-aws-javaapp-svc"
+    EKS_DEPLOY_APP: "sonar-aws-javaapp-deploy"
+    EKS_ROLE: "ClustWorkshopAdminRole"
+    SONAR_PROJECT: "java-spring-example"
+    PRKey: ""
+  shell: bash
+phases:
+  install:
+    runtime-versions:
+      java: corretto17
+  pre_build:
+    commands:
+      # Install aws client
+      - pip3 install --upgrade awscli
+      # Install kubectl tools
+      - export ARCH=$(uname -m)
+      - if [ "$ARCH" = "aarch64" ]; then
+         export KUBECTL_URL="https://storage.googleapis.com/kubernetes-release/release/v1.27.0/bin/linux/arm64/kubectl";
+       else
+         export KUBECTL_URL="https://storage.googleapis.com/kubernetes-release/release/v1.27.0/bin/linux/amd64/kubectl";
+        fi
+      - curl -LO $KUBECTL_URL
+      - chmod +x kubectl
+      - mv ./kubectl /usr/local/bin/kubectl
+      - echo "CODEBUILD_SOURCE_VERSION -> ${CODEBUILD_SOURCE_VERSION}"
+      - echo "SourceBranch -> ${SourceBranch}"
+      - echo "DestinationBranch -> ${DestinationBranch}"
+      - echo "PRKey -> ${PRKey}"
+      - ulimit -s 8192
+
+      # Connect to Amazon ECR
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+      # Update Kube config Home Directory
+      - export KUBECONFIG=$HOME/.kube/config
+  build:
+    commands:
+      - echo Build started on `date`
+      - set -a
+      - |-
+        if [[ $PRKey -ne '' ]] ; then
+          echo "We are doing a PR analysis on ${SourceBranch} into ${DestinationBranch} with key ${PRKey}"
+          export SQ_ANALYSIS_PARAMS="-Dsonar.pullrequest.key=${PRKey} \
+                                      -Dsonar.pullrequest.branch=${SourceBranch##refs/heads/} \
+                                      -Dsonar.pullrequest.base=${DestinationBranch##refs/heads/}"
+        else
+          if [[ ${SourceBranch##refs/heads/} == 'main' ]] ; then
+            echo "We are doing an analysis of the main branch: ${SourceBranch}"
+            export SQ_ANALYSIS_PARAMS=""
+          else
+            echo "We are doing a branch analysis  on ${SourceBranch}"
+            export SQ_ANALYSIS_PARAMS="-Dsonar.branch.name=${SourceBranch##refs/heads/}"
+          fi
+        fi
+      # Run compile, execute sonar scanner and create application package
+      - mvn clean install sonar:sonar package -Dmaven.test.skip=true -Dcheckstyle.skip -Dsonar.projectKey=$SONAR_PROJECT -Dsonar.qualitygate.wait=true -Dsonar.qualitygate.timeout=120 -Dsonar.verbose=true $SQ_ANALYSIS_PARAMS
+  post_build:
+    commands:
+      - echo Build started on `date`
+      - set -a
+      - |- 
+        if [[ ${CODEBUILD_BUILD_SUCCEEDING} = '1' ]]; then
+         echo Build succeeded. Running post-build steps...
+         echo Build completed on `date`
+         if [[ ${PRKey} == '' ]]; then
+           if [[ ${SourceBranch##refs/heads/} == 'main' ]] ; then
+             echo 'Building the Docker image...'
+             echo Build started on `date`
+             docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG .
+             docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
+             echo 'Pushing the Docker images...'
+             docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
+             # Setup kubectl with our EKS Cluster
+             mkdir ~/.kube/
+             aws eks --region $AWS_DEFAULT_REGION update-kubeconfig --name $EKS_CLUSTER_NAME --role-arn arn:aws:iam::$AWS_ACCOUNT_ID:role/$EKS_ROLE
+             chmod 0600 ~/.kube/config
+             # Change docker image in k8s deployment file
+             echo 'Set docker image in k8s deployment file'
+             NEW_SUFFIX=" $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG"
+             awk -v start="image:" -v new="$NEW_SUFFIX" '$1 == start {sub($2, new)}{ print }' app-k8s/sonar-aws-javaApp.yaml > tmpfile && mv tmpfile app-k8s/sonar-aws-javaApp.yaml
+             # Apply changes to our Application using kubectl
+             echo 'Apply changes to kube app'
+             # Test application is deployed
+             podStatus=$(kubectl get pods -n $EKS_NS_APP -o=jsonpath='{range .items[*]}{.status.conditions[?(@.type=="ContainersReady")].status}{"\n"}{end}')
+             if [[ $podStatus == 'True' ]]; then
+               kubectl -n $EKS_NS_APP rollout restart deploy $EKS_DEPLOY_APP
+               else kubectl apply -f app-k8s/
+             fi
+             echo 'Completed App Deployement'
+             sleep 60
+             #JAVA_APP_ENDPOINT=`kubectl describe ingress -n $EKS_NS_APP  | grep Address | cut -d ":" -f 2 | xargs`
+             JAVA_APP_ENDPOINT=`kubectl get services sonar-aws-javaapp-svc -n $EKS_NS_APP --output jsonpath='{.status.loadBalancer.ingress[0].hostname}'`
+             echo -e "\nThe Java application can be accessed nw via http://$JAVA_APP_ENDPOINT:8080"
+           fi
+         fi
+           else echo "Build failed. Skipping post-build steps..."
+        fi
+artifacts:
+  files:
+    - target/aws-sonar-demo-1.1.jar
+    - app-k8s/*
+  discard-paths: yes

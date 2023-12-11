@@ -1,0 +1,19 @@
+{
+        "ClusterName" : "ClustWorkshop",
+        "NSDataBase": "databasepg1", 
+        "PvcDBsize" : "5Gi",
+        "PGSecret":"dist/pgsecret.yaml",
+        "NSSonar": "sonarqube1",
+        "PvcSonar": "dist/pvcsonar.yaml",
+        "StorageClass": "managed-csi",
+        "Sonaruser": "sonarqube",
+        "Sonarpass": "Bench123",
+        "PGsql": "dist/pgsql.yaml",
+        "PGconf": "dist/pgsal-configmap.yaml",
+        "DepSonar": "dist/sonarqube.yaml",
+        "PGsvc": "postgres-service",
+        "SonarSVC": "sonarqube-service",
+        "SonarPort": "9000",
+        "SonarTransport": "http://",
+        "SonarTagImage": "docker.io/sonarqube:community"
+}

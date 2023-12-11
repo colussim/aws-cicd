@@ -1,0 +1,113 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sonarqube
+  namespace: ""
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sonarqube
+  template:
+    metadata:
+      name: sonarqube
+      labels:
+        app: sonarqube
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+      initContainers:
+      - name: sonarqube-es-init
+        image: busybox:1.32
+        command:
+        - /bin/sh
+        - -c
+        - sysctl -w vm.max_map_count=262144
+        imagePullPolicy: IfNotPresent
+        securityContext:
+          privileged: true
+          runAsUser: 0
+        volumeMounts: []
+      - name: sonarqube-es-init2
+        image: busybox:1.32
+        command:
+        - /bin/sh
+        - -c
+        - chown -R 1000:1000 /opt/sonarqube/extensions && chmod -R 777 /opt/sonarqube/extensions
+        imagePullPolicy: IfNotPresent
+        securityContext:
+          privileged: true
+          runAsUser: 0
+        volumeMounts:
+        - mountPath: /opt/sonarqube/extensions
+          name: sonar-ext
+      - name: sonarqube-es-init3
+        image: busybox
+        command:
+        - /bin/sh
+        - -c
+        - chown -R 1000:1000 /opt/sonarqube/data && chmod -R 777 /opt/sonarqube/data
+        imagePullPolicy: IfNotPresent
+        securityContext:
+          privileged: true
+          runAsUser: 0
+        volumeMounts:
+        - mountPath: /opt/sonarqube/data
+          name: sonar-data
+      - name: sonarqube-es-init4
+        image: busybox
+        command:
+        - /bin/sh
+        - -c
+        - chown -R 1000:1000 /opt/sonarqube/logs && chmod -R 777 /opt/sonarqube/logs
+        imagePullPolicy: IfNotPresent
+        securityContext:
+          privileged: true
+          runAsUser: 0
+        volumeMounts:
+        - mountPath: /opt/sonarqube/logs
+          name: sonar-logs
+      containers:
+      - name: sonarqube
+        image: docker.io/sonarqube:community
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 9000
+        volumeMounts:
+        - mountPath: /opt/sonarqube/data
+          name: sonar-data
+        - mountPath: /opt/sonarqube/logs
+          name: sonar-logs
+        - mountPath: /opt/sonarqube/extensions
+          name: sonar-ext
+        env:
+        - name: SONAR_JDBC_URL
+          valueFrom:
+            secretKeyRef:
+              name: sonarsecret
+              key: SONAR_JDBC_URL
+        - name: SONAR_JDBC_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: sonarsecret
+              key: SONAR_JDBC_USERNAME
+        - name: SONAR_JDBC_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: sonarsecret
+              key: SONAR_JDBC_PASSWORD
+        securityContext:
+          privileged: true
+          runAsUser: 1000
+          runAsGroup: 1000
+      volumes:
+      - name: sonar-data
+        persistentVolumeClaim:
+          claimName: sonar-data
+      - name: sonar-logs
+        persistentVolumeClaim:
+          claimName: sonar-logs
+      - name: sonar-ext
+        persistentVolumeClaim:
+          claimName: sonar-ext

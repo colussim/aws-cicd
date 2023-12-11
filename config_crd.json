@@ -1,0 +1,7 @@
+{
+"Region":       "eu-central-1",
+"Account" : "xxxxxxx",
+"SSOProfile": "default",
+"Index": "02",
+"AWSsecret": "prod1/sonarqube/workshop"
+}
