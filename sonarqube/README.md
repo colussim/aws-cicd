@@ -37,7 +37,7 @@ Two namespaces will be created:
 - sonarqube: for sonarqube instance
 - databasepg : for postgresql database instance
 
-By default this deployment deploys the community edition of sonarqube, if you want to deploy another version please modify the SonarTagImage in the config file : **cinfig.json** 
+By default this deployment deploys the community edition of sonarqube, if you want to deploy another version please modify the SonarTagImage in the config file : **config.json** 
 
 
 ## Prerequisites
@@ -138,7 +138,7 @@ sonarqube-7c66dfc757-p9sth   1/1     Running   0         1m56s
 We can check if SonarQube service running :
 
 ```bash 
-aws-cicd:/sonarqube> kubectl get pods -n sonarqube
+aws-cicd:/sonarqube> kubectl get svc -n sonarqube
 NAME                        TYPE           CLUSTER-IP     EXTERNAL-IP              PORT(S)          AGE
 service/sonarqube-service   LoadBalancer   10.X.X.X       k8s-sonarqub-xxxx.com   9000:30621/TCP   3m17s
 ```    
@@ -154,6 +154,18 @@ When installing SonarQube, a default user with Administer System permission is c
 
 * Login: admin
 * Password: admin
+
+The first time you connect to intense sonarqube, you must change the administrator password:
+ ![SonarQube passwd](images/changepass.png)
+
+
+❗️ If you are using a Developer or Enterprise version of sonarqube, before proceeding to the next step you must enter the license number.
+Go to menu  **Administration/Configuration/License Manager**
+
+ ![SonarQube license](images/needlicense.png)
+
+  ![SonarQube Add license](images/addlicense.png)
+
 
 -----
 <table>

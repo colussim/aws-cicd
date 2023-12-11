@@ -28,10 +28,11 @@ BuildPr:      Build project name : clean-java-code-build
 PiplineN:     Pipline name
 ClusterName   ClustWorkshop
 EksAdminRole  AdminRole name
+Platform      x86
 ```    
-❗️ Do not change these values (for this deployment), just the cluster name.
+❗️ Do not change these values (for this deployment), just the cluster name or **Platform** if you run a eks cluster on ARM set Platform value at **arm**
 
-BBut you can deploy your own application, you'll need to change the source of your application's repository (**GitRepo** entry) in config.json and respect the following variables in your *buildspec.yml* file :
+But you can deploy your own application, you'll need to change the source of your application's repository (**GitRepo** entry) in config.json and respect the following variables in your *buildspec.yml* file :
 * SONAR_TOKEN
 * SONAR_HOST_URL
 * SourceBranch"`
@@ -94,6 +95,59 @@ arn:aws:cloudformation:eu-central-1:xxxxxxxx:stack/DevopsStack02/f3f9ee40-82f7-1
 
 aws-cicd:/devops/>
 ``` 
+
+On your AWS management console, you can now see your repository (go in CodeCommit console):
+![repo](images/repos.png)
+
+It was populated :
+![repo](images/reposcont.png)
+
+After the code push to the repository a first build is triggered:
+![repo](images/reposbuild.png)
+
+After a few minutes the build has a successful status, your application is deployed on the EKS cluster.😀
+
+A new name space is created : sonar-aws-javaapp-ns
+You can check with the following command :
+
+```bash
+aws-cicd:/devops/> kubectl get ns sonar-aws-javaapp-ns
+Name                   Status     Age
+sonar-aws-javaapp-ns   Active      3m
+aws-cicd:/devops/>
+```
+
+You can check that your application has been deployed correctly with the following command:
+
+```bash
+aws-cicd:/devops/> kubectl get all -n sonar-aws-javaapp-ns
+NAME                                            READY   STATUS    RESTARTS   AGE
+pod/sonar-aws-javaapp-deploy-5dc978947b-b6m9k   1/1     Running   0          5m
+
+NAME                            TYPE           CLUSTER-IP      EXTERNAL-IP                  PORT(S)          AGE
+service/sonar-aws-javaapp-svc   LoadBalancer   10.100.41.213   k8s-sonarxxx.amazonaws.com   8080:32110/TCP   5m
+
+NAME                                       READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/sonar-aws-javaapp-deploy   1/1     1            1           5m
+
+NAME                                                  DESIRED   CURRENT   READY   AGE
+replicaset.apps/sonar-aws-javaapp-deploy-5dc978947b   1         1         1       5m
+aws-cicd:/devops/>
+```
+
+😀  Now you can connect to the Application instance at the following url sample (take EXTERNAL-IP service and port of the application):  
+   
+ http://k8s-sonarxxx.amazonaws.com:8080
+
+ ![App Java](images/appjava.png)
+
+You can also go to ECR (Elastic Container Registry) to check the creation of your repository, which contains the docker image generated during the build(go to ECR console):
+ ![SonarQube Login](images/ecr.png)
+
+
+The last step is to set up an eventbridge rule that will be triggered by each Pull Request.
+
+
 
 -----
 <table>

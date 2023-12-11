@@ -37,6 +37,15 @@ aws-cicd:/eventbridge/>
 
 ``` 
 
+<h1>Congratulations on successfully completing this tutorial. 👏</h1>
+
+<table class="table" style="font-size: 14px;">
+<tr style="border: 0px transparent">
+	<td style="border: 0px transparent;width:50%;"><h1 style="font-size:100px;">Tank You</h1> </td><td style="border: 0px transparent"><img src="images/grommet.png" alt="grommet" style="float: right;width:50%"></td>
+</tr>
+
+</table>
+
 
 -----
 <table>

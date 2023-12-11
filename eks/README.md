@@ -98,7 +98,7 @@ Outputs:
 ✅ Run this command (XXXXXX is your AWS account number):
 
 ``` 
-CDK:/EKS/> aws eks update-kubeconfig --name ClustWorkshop-01 --region eu-central-1 --role-arn arn:aws:iam::XXXXXX:role/ClustWorkshop-01-AdminRole
+aws-cicd:/eks/> aws eks update-kubeconfig --name ClustWorkshop-01 --region eu-central-1 --role-arn arn:aws:iam::XXXXXX:role/ClustWorkshop-01-AdminRole
 
 ``` 
 Let’s run kubectl get nodes to get the node in your EKS Cluster and check the connection to your cluster :

@@ -86,6 +86,42 @@ go to directory [eventbridge](eventbridge) (please read the README.md)
 
 ---
 
+## ✅ Conclusion
+
+In conclusion, this tutorial has walked you through the comprehensive process of deploying SonarQube and a Java application in an AWS EKS environment, utilizing the powerful combination of AWS Cloud Development Kit (AWS CDK) and AWS SDK for Golang. By following the step-by-step guide, you have gained insights into setting up a robust development and deployment pipeline that includes AWS CodeCommit for version control, CodeBuild for building your Java application, and seamlessly integrating SonarQube for thorough code analysis to ensure the highest code quality.
+
+Deploying applications on AWS EKS provides scalability, reliability, and the flexibility to manage containerized workloads efficiently. Leveraging AWS CDK and AWS SDK for Golang streamlines the infrastructure as code (IaC) process, making it easier to define and provision resources in the AWS environment.
+
+By integrating SonarQube into your CI/CD pipeline, you have added a critical layer of code quality assurance. This allows you to identify and address potential issues early in the development process, leading to more robust and secure applications in production.
+
+---
+
+
+## ✅ Clean Up AWS resources
+
+For clean up platform please run this command :
+
+```bash 
+aws-cicd:>./resetws.sh
+
+```
+
+This script clean up all deployed components except the VPC. If you want to destroy the vpc, execute the following commands :
+
+```bash 
+aws-cicd:>cd vpc
+aws-cicd:/vpc> cdk destroy --force
+
+```
+
+---
+
+## ✅ Next step
+
+At this stage, the sonarqube deployment provides a public ip address in http and a non ssl communication between the database, in a next step I will do the integration in a dns domain and a https access with certificate and a SSL communication between the database.And integration of the eventbridge stage into the devops stack
+
+---
+
 ## ✅ Ressources
 
 ▶️ [awscdk go package](https://pkg.go.dev/github.com/aws/aws-cdk-go/awscdk/v2#section-readme) 

@@ -1,13 +1,13 @@
 {
         "ClusterName" : "ClustWorkshop",
         "VPCid" : "vpc-02343b5fcdd76ab3d",
-        "K8sVersion" : "1.27",
+        "K8sVersion" : "1.28",
         "Workernode" : 2,
         "EksAdminRole": "AdminRole",
         "EBSRole": "CSIDriverRole",
         "Instance": "T4G",
         "InstanceSize": "XLARGE",
-        "AddonVersion": "v1.24.0-eksbuild.1",
+        "AddonVersion": "v1.25.0-eksbuild.1",
         "ScName": "managed-csi",
         "ScNamef": "dist/sc.yaml"
 }

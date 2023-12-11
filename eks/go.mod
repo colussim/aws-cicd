@@ -15,6 +15,6 @@ require (
 	github.com/cdklabs/awscdk-asset-awscli-go/awscliv1/v2 v2.2.200 // indirect
 	github.com/cdklabs/awscdk-asset-kubectl-go/kubectlv20/v2 v2.1.2 // indirect
 	github.com/cdklabs/awscdk-asset-node-proxy-agent-go/nodeproxyagentv6/v2 v2.0.1 // indirect
-	github.com/cdklabs/awscdk-kubectl-go/kubectlv27/v2 v2.0.0 // indirect
+	github.com/cdklabs/awscdk-kubectl-go/kubectlv28/v2 v2.0.0 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
 )
