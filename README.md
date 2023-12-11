@@ -73,16 +73,16 @@ Please see [subnet requirements and considerations](https://docs.aws.amazon.com/
 go to directory [VPC](vpc) (please read the README.md)
 
 ### ✅ Creating a EKS Cluster
-go to directory [EKS](https://github.com/SonarSource-Demos/aws-workshop/tree/sonar-browsable-markdown/static/assets/CDK/EKS) (please read the README.md)
+go to directory [EKS](eks) (please read the README.md)
 
 ### ✅ SonarQube deployment
-go to directory [sonarqube](https://github.com/SonarSource-Demos/aws-workshop/tree/sonar-browsable-markdown/static/assets/CDK/sonarqube) (please read the README.md)
+go to directory [sonarqube](sonarqube) (please read the README.md)
 
 ### ✅ CI/CD for Amazon EKS
-go to directory [devops](https://github.com/SonarSource-Demos/aws-workshop/tree/sonar-browsable-markdown/static/assets/CDK/devops) (please read the README.md)
+go to directory [devops](devops) (please read the README.md)
 
 ### ✅ Amazon EventBridge
-go to directory [eventbridge](https://github.com/SonarSource-Demos/aws-workshop/tree/sonar-browsable-markdown/static/assets/CDK/eventbridge) (please read the README.md)
+go to directory [eventbridge](eventbridge) (please read the README.md)
 
 ---
 
