@@ -15,7 +15,29 @@ A CloudFormation template is generated for each deployment.
 
 My regret is not to have been able to do everything with the CDK and have a complete CloudFormation stack due to the lack of knowledge and the documentation of the AWS CDK which is really very poor, but I do not lose hope of getting there.😀
 
-## Architecture
+## Tutorial Architecture Overview
+
+The foundation of our tutorial's architecture is built upon Amazon Elastic Kubernetes Service (EKS), a managed Kubernetes service. The EKS cluster provides a scalable and reliable platform for deploying containerized applications.
+
+**Environments (Namespaces)**
+1. **SonarQube Deployment Environment**:
+This namespace is dedicated to the deployment of the SonarQube instance. SonarQube is a code quality and security analysis tool.
+
+2. **Database Deployment Environment**:
+The second namespace is designated for the deployment of the database required by the SonarQube instance. This separation allows for independent management and scaling of the database resources, enhancing modularity and ease of maintenance.
+
+3. **Java Application Deployment Environment**:
+The third namespace serves as the deployment environment for our Java application. Here, we deploy and manage the components of our Java application independently from SonarQube and its associated database. This segregation promotes a microservices-oriented architecture, facilitating scalability and maintainability.
+
+**Interaction and Integration**
+
+The SonarQube instance, database, and Java application environments within the EKS cluster interact seamlessly. The namespaces are interconnected to establish the necessary dependencies, ensuring proper communication and data flow between the SonarQube instance, its associated database, and the Java application.
+
+By adopting this architecture, we achieve a modular and scalable infrastructure that simplifies management, promotes isolation of concerns, and enhances the overall reliability of the deployed components.
+
+
+
+![Archie](images1/archie.png)
 
 ## Workload
 
