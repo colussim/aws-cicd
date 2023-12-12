@@ -1,6 +1,6 @@
  ![SonarQube](images1/sonar.png)![Amazon ECS](https://img.shields.io/static/v1?style=for-the-badge&message=Amazon+ECS&color=222222&logo=Amazon+ECS&logoColor=FF9900&label=)![Static Badge](https://img.shields.io/badge/Go-v1.21-blue:) ![Static Badge](https://img.shields.io/badge/AWS_CDK-v2.114.1-blue:)
 
-The purpose of this tutorial is to guide you through the various steps involved in deploying sonarqube and a java application in an AWS EKS environment using AWS Cloud Development Kit (AWS CDK and AWS SDK) for golang.
+The purpose of this tutorial is to guide you through the various steps involved in deploying sonarqube and a java application in an AWS EKS environment using AWS Cloud Development Kit (AWS CDK and AWS SDK) for Golang.
 The java application will be stored in AWS CodeCommit and will use CodeBuild integrated with sonarqube (for code analysis) for production release .
 
 But you can adapt it and deploy your own application.
