@@ -20,12 +20,22 @@ My regret is not to have been able to do everything with the CDK and have a comp
 
 ![Flow CICD](images1/archiflow2.png)
 
+
+1. **Existing Java application : Your team has an existing Java application, which it is currently deploying and which has code quality problems.They use a Git repository (AWS CodeCommit) for version control.
+2. **AWS EventBridge: it automatically creates an event bus to which events are routed.It detects whether it's a commit event or a Pull Request and sends the event to CodePipline.
+3. **AWS CodePipeline: it models the entire publishing process for creating your code, deploying it to pre-production environments, testing your application and launching it into production by triggering a CodeBuild event.
+4. **AWS CodeBuild: With CodeBuild, you don't need to commission, manage or scale your generation servers. This service provides pre-packaged generation environments for commonly used programming languages and generation tools. In our case, we'll be using a JAVA environment with Maven. 
+5. **Clean Code: We trigger a SonarQube analysis if the Quality Gates applied to our project passed, we go on to the production stage if the build fails and we generate an event in AWS CloudWatch and we can see the analysis of our code in SonarQube.
+6. **Quality Gate passed : build a Docker image of our application.
+7. **Quality Gate passed : upload our application Docker image to AWS ECR.
+8. **Deploying our application in our EKS cluster
+
 ## Prerequisites
 
 Before you get started, you’ll need to have these things:
 
 * AWS account
-* SSO Login
+* [SSO Login](https://docs.aws.amazon.com/cli/latest/userguide/sso-configure-profile-token.html)
 * [AWS CLI V2](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 * [AWS Cloud Development Kit (AWS CDK) v2](https://docs.aws.amazon.com/cdk/v2/guide/getting_started.html)
 * [Go language installed](https://go.dev/)
